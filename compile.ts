@@ -48,6 +48,7 @@ function main(project: string, genDir?: string) {
   let program = ts.createProgram(parsed.fileNames, parsed.options, compilerHost);
   check(program.getOptionsDiagnostics());
 
+  fs.mkdirSync(genDir);
   fs.writeFileSync(path.join(genDir, "b.ts"), "export let a:string;", {encoding: 'utf-8'});
 
   program = ts.createProgram(parsed.fileNames, parsed.options, ts.createCompilerHost(parsed.options), program);
