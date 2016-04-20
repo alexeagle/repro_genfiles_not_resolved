@@ -23,7 +23,7 @@ function check(diags: ts.Diagnostic[]) {
 }
 
 function main(project: string, genDir?: string) {
-  const basePath = project;
+  const basePath = path.join(process.cwd(), project);
   let diagnostics: ts.Diagnostic[] = [];
 
   // Allow a directory containing tsconfig.json as the project value
@@ -48,7 +48,7 @@ function main(project: string, genDir?: string) {
   let program = ts.createProgram(parsed.fileNames, parsed.options, compilerHost);
   check(program.getOptionsDiagnostics());
 
-  fs.mkdirSync(genDir);
+  if (!fs.existsSync(genDir)) fs.mkdirSync(genDir);
   fs.writeFileSync(path.join(genDir, "b.ts"), "export let a:string;", {encoding: 'utf-8'});
 
   program = ts.createProgram(parsed.fileNames, parsed.options, ts.createCompilerHost(parsed.options), program);
